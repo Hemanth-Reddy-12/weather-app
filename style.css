@@ -1,0 +1,97 @@
+:root {
+    --dark-background-color: #222831;
+    --dark-text-color: #DDDDDD;
+    --text-font: 'Cormorant Infant', serif;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: var(--text-font);
+}
+
+.container-fluid {
+    height: 100%;
+    width: 100%;
+    background-color: var(--dark-background-color);
+}
+
+.box {
+    background: #30475E;
+}
+
+.box .header {
+    color: #F05454;
+}
+.box .fa {
+    color: #F05454;
+}
+
+.box .search-box input {
+    width: 100%;
+    font-size: 20px;
+    padding: 8px;
+    outline: none;
+    font-weight: bold;
+    border: 1px solid #F05454;
+    background: transparent;
+    color: var(--dark-text-color);
+    border-radius: 8px;
+}
+
+.box .search-box {
+    position: relative;
+}
+
+.box .search-box button {
+    font-size: 20px;
+    outline: none;
+    background: #F05454;
+}
+
+.box .search-box button:hover {
+    color: #F05454;
+    border:1px solid #F05454;
+    background: transparent;
+    transform: translateY(-3px);
+}
+
+.wave {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.wave svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+}
+
+.wave .shape-fill {
+    fill: #F05454;
+}
+
+.search-result {
+    background: #F05454;
+    width: 100%
+}
+
+.result-box {
+    background-color: var(--dark-background-color);
+    border: 1px solid #30475E;
+    color: #F05454;
+}
+
+.result-weather .wbox {
+    font-size: 25px;
+    color: #DDDDDD;
+    border: 1px solid #F05454;
+    font-weight: 700;
+}
+
+.location {
+    font-size: 25px;
+    font-weight: bold;
+}

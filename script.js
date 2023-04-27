@@ -19,7 +19,7 @@ function getCurrentLocation() {
 
 document.getElementById("search-btn").onclick = function getCity() {
   const CITY = document.getElementById("city").value;
-  const LINK = `http://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}`;
+  const LINK = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}`;
   getWeather(LINK);
 };
 

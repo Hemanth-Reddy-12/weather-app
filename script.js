@@ -1,6 +1,6 @@
 const API_KEY = "87268975ad594f0ee4fecc96a4a72044";
 
-getCurrentLocation()
+getCurrentLocation();
 
 function getCurrentLocation() {
   if (navigator.geolocation) {
@@ -8,9 +8,9 @@ function getCurrentLocation() {
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
       console.log("Latitude: " + lat + " Longitude: " + lng);
-      
+
       const LL_LINK = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`;
-      getWeather(LL_LINK)
+      getWeather(LL_LINK);
     });
   } else {
     console.log("Geolocation is not supported by this browser.");
@@ -19,7 +19,7 @@ function getCurrentLocation() {
 
 document.getElementById("search-btn").onclick = function getCity() {
   const CITY = document.getElementById("city").value;
-  const LINK = `http://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}`;
+  const LINK = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}`;
   getWeather(LINK);
 };
 
@@ -28,24 +28,25 @@ function getWeather(LINK) {
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
-      let weather = data.weather[0].description;
+      let weather = data.weather[0].main;
+      let id = data.weather[0].id;
+      let desc = data.weather[0].description;
       let city = data.name;
       let temp = data.main.temp;
       let country = data.sys.country;
       let windSpeed = data.wind.speed;
-      SendWeatherReport(city, weather, temp, windSpeed, country);
+      SendWeatherReport(id, desc, city, weather, temp, windSpeed, country);
     })
     .catch((error) => {
       document.getElementById(
-        "logo"
+        "result"
       ).innerHTML = `<p class="display-2">city not found</p>`;
     });
 }
 
-function SendWeatherReport(city, weather, temp, windSpeed, country) {
+function SendWeatherReport(id, desc, city, weather, temp, windSpeed, country) {
   let w = `<span style="color: #F05454">weather</span><br>${weather}`;
   document.getElementById("weather").innerHTML = w;
-  let tempF = temp;
   temp = temp - 273.15;
   let t = `<span style="color: #F05454">temperature</span><br>${temp.toFixed(
     2
@@ -54,7 +55,8 @@ function SendWeatherReport(city, weather, temp, windSpeed, country) {
   let speed = `<span style="color: #F05454">wind Speed</span><br>${windSpeed}`;
   document.getElementById("wind").innerHTML = speed;
   document.getElementById("location").innerHTML = `${city},${country}`;
-  logo = getWeatherIcon(tempF);
+  logo = getWeatherIcon(id);
+  document.getElementById("desc").innerHTML = desc;
   document.getElementById("logo").innerHTML = logo;
 }
 

@@ -2,13 +2,22 @@ const API_KEY = "87268975ad594f0ee4fecc96a4a72044";
 
 getCurrentLocation();
 
+function darkmode() {
+  var body = document.body;
+  var btn = document.getElementById("dark");
+  var sbtn = document.getElementById("search-btn");
+  body.classList.toggle("bg-dark")
+  btn.classList.toggle("bg-white")
+  sbtn.classList.toggle("bg-white")
+}
+
+
 function getCurrentLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
       console.log("Latitude: " + lat + " Longitude: " + lng);
-
       const LL_LINK = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`;
       getWeather(LL_LINK);
     });
@@ -18,7 +27,7 @@ function getCurrentLocation() {
 }
 
 document.getElementById("search-btn").onclick = function getCity() {
-  const CITY = document.getElementById("city").value;
+  const CITY = document.getElementById("search-city").value;
   const LINK = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}`;
   getWeather(LINK);
 };
@@ -31,57 +40,31 @@ function getWeather(LINK) {
       let weather = data.weather[0].main;
       let id = data.weather[0].id;
       let desc = data.weather[0].description;
+      let icon = data.weather[0].icon;
       let city = data.name;
       let temp = data.main.temp;
       let country = data.sys.country;
       let windSpeed = data.wind.speed;
-      SendWeatherReport(id, desc, city, weather, temp, windSpeed, country);
+      document.getElementById('not').innerHTML = ``;
+      SendWeatherReport(id, desc, city, weather, temp, windSpeed, country, icon, data);
     })
     .catch((error) => {
-      document.getElementById(
-        "result"
-      ).innerHTML = `<p class="display-2">city not found</p>`;
+      document.getElementById('not').innerHTML = `not found`;
+      console.log(error);
     });
 }
 
-function SendWeatherReport(id, desc, city, weather, temp, windSpeed, country) {
-  let w = `<span style="color: #F05454">weather</span><br>${weather}`;
-  document.getElementById("weather").innerHTML = w;
+function SendWeatherReport(id, desc, city, weather, temp, windSpeed, country, icon) {
+  const date = new Date();
+  document.getElementById("w-report").innerHTML = `${weather}`;
   temp = temp - 273.15;
-  let t = `<span style="color: #F05454">temperature</span><br>${temp.toFixed(
-    2
-  )} &#8451`;
-  document.getElementById("temp").innerHTML = t;
-  let speed = `<span style="color: #F05454">wind Speed</span><br>${windSpeed}`;
-  document.getElementById("wind").innerHTML = speed;
-  document.getElementById("location").innerHTML = `${city},${country}`;
-  logo = getWeatherIcon(id);
-  document.getElementById("desc").innerHTML = desc;
-  document.getElementById("logo").innerHTML = logo;
+  document.getElementById("t-report").innerHTML = `${temp.toFixed(2)} &#8451`;
+  document.getElementById("wi-report").innerHTML = `${windSpeed} KpH`;
+  document.getElementById("city").innerHTML = `${city}`;
+  document.getElementById('time').innerHTML = `${date.toLocaleTimeString()}`;
+  document.getElementById('date').innerHTML = `${date.toDateString()}`;
+  document.getElementById("location").innerHTML = `- ${city},${country}`;
+  const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+  document.getElementById("logo").src = iconUrl;
 }
 
-function getWeatherIcon(weatherId) {
-  // Map the weather ID to a corresponding emoji
-  if (weatherId >= 200 && weatherId < 300) {
-    // Thunderstorm
-    return `<i class="fas fa-solid fa-cloud-bolt fa-beat fa-7x"></i>`;
-  } else if (weatherId >= 300 && weatherId < 600) {
-    // Rain
-    return `<i class="fas fa-solid fa-cloud-rain fa-bounce fa-7x"></i>`;
-  } else if (weatherId >= 600 && weatherId < 700) {
-    // Snow
-    return `<i class="fas fa-regular fa-snowflake fa-spin fa-7x"></i>`;
-  } else if (weatherId >= 700 && weatherId < 800) {
-    // Atmosphere (fog, mist, haze, etc.)
-    return `<i class="fas fa-solid fa-smog fa-fade fa-7x"></i>`;
-  } else if (weatherId === 800) {
-    // Clear
-    return `<i class="fas fa-solid fa-sun fa-spin fa-7x"></i>`;
-  } else if (weatherId > 800 && weatherId < 900) {
-    // Cloudy
-    return `<i class="fas fa-solid fa-wind fa-7x"></i>`;
-  } else {
-    // Unknown
-    return `<i class="fas fa-solid fa-circle-question fa-shake fa-7x"></i>`;
-  }
-}
